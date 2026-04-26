@@ -69,6 +69,14 @@ def main(argv: List[str] | None = None) -> int:
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
 
+    if args.cooldown < 0:
+        logger.error("--cooldown must be a non-negative number, got %s.", args.cooldown)
+        return 1
+
+    if args.max_repeats < 0:
+        logger.error("--max-repeats must be a non-negative integer, got %s.", args.max_repeats)
+        return 1
+
     alert_statuses = _status_set(args.alert_on)
     channel = LogAlertChannel()
     manager = AlertManager(channels=[channel], fire_on=alert_statuses)
