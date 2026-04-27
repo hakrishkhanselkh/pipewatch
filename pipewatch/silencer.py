@@ -62,6 +62,14 @@ class Silencer:
         self._purge_expired()
         return any(rule.matches(result) for rule in self._rules)
 
+    def matching_rules(self, result: MetricResult) -> list[SilenceRule]:
+        """Return all active rules that match *result*.
+
+        Useful for diagnostics and explaining why an alert is silenced.
+        """
+        self._purge_expired()
+        return [rule for rule in self._rules if rule.matches(result)]
+
     def active_rules(self) -> list[SilenceRule]:
         """Return all non-expired rules."""
         self._purge_expired()
